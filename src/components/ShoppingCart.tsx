@@ -18,8 +18,6 @@ class ShoppingCart extends React.Component<Props, State> {
   }
 
   handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log('e.target ', e.target)
-    console.log('e.currentTarget ', e.currentTarget)
     if ((e.target as HTMLElement).nodeName === 'SPAN') {
       this.setState({ isOpen: !this.state.isOpen })
     }
@@ -31,16 +29,20 @@ class ShoppingCart extends React.Component<Props, State> {
         {(value) => {
           return (
             <div className={styles.cartContainer}>
-              <button className={styles.button} onClick={this.handleClick}>
+              <button
+                className={styles.button}
+                onClick={(e) => this.handleClick(e)}>
                 <FiShoppingCart />
-                <span>购物车 {value.shoppingCart.items.length} (件)</span>
+                <span>购物车 {value.shoppingCart.items.length}（件）</span>
               </button>
               <div
                 className={styles.cartDropDown}
-                style={{ display: this.state.isOpen ? 'block' : 'none' }}>
+                style={{
+                  display: this.state.isOpen ? 'block' : 'none',
+                }}>
                 <ul>
                   {value.shoppingCart.items.map((item) => {
-                    return <li>{item.name}</li>
+                    return <li key={item.id}>{item.name}</li>
                   })}
                 </ul>
               </div>

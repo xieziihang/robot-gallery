@@ -13,6 +13,11 @@ code {
     monospace;
 }
 
+h1 {
+  font-family: 'Slidefu';
+  font-size: 72px;
+}
+
 @font-face {
   font-family: 'Slidefu';
   src: local('Slidefu'),

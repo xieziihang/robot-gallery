@@ -1,39 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import Robot from './components/Robot'
-import RobotDiscount from './components/RobotDiscount'
-import logo from './assets/images/logo.svg'
+import logo from './assets/icons/logo.svg'
+import ShoppingCart from './components/ShoppingCart'
 import styles from './App.module.css'
-import ShoppingCart from './components/ShoppingChart'
+import Robot from './components/Robot'
 
-interface Props {}
-interface State {
-  // 资源来自网络请求，返回的数据类型是不受限制的
-  // 前端强行定义API数据类型，违反前后端分离的原则（所以这里的 robotGellery: any[]）
-  robotGellery: any[]
-  count: number
-}
-
-const App: React.FC<Props> = (props) => {
-  const [count, setCount] = useState<number>(0)
+const App: React.FC = (props) => {
   const [robotGallery, setRobotGallery] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string>()
 
   useEffect(() => {
-    document.title = `点击次数为${count}`
-  }, [count])
+    document.title = `机器人画廊`
+  }, [])
 
-  // Effect 中使用 async await 异步模式
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(
+        const responses = await fetch(
           'https://jsonplaceholder.typicode.com/users'
         )
-        // .then((response) => response.json())
-        // .then((data) => setRobotGallery(data))
-        const data = await response.json()
+        const data = await responses.json()
         setRobotGallery(data)
       } catch (e: any) {
         setError(e.message)
@@ -49,32 +36,16 @@ const App: React.FC<Props> = (props) => {
         <img src={logo} className={styles.appLogo} alt="logo" />
         <h1>罗伯特机器人炫酷吊炸天online购物平台的名字要长</h1>
       </div>
-      <button
-        onClick={() => {
-          setCount(count + 1)
-        }}>
-        Click
-      </button>
-      <span>count：{count}</span>
       <ShoppingCart />
-      {(error || error !== '') && <div>网站出错：{error}</div>}
+      {!error || (error !== '' && <div>网站出错: {error}</div>)}
       {!loading ? (
         <div className={styles.robotList}>
-          {robotGallery.map((r: any, index: number) =>
-            index % 2 === 0 ? (
-              <RobotDiscount
-                key={r.id}
-                id={r.id}
-                email={r.email}
-                name={r.name}
-              />
-            ) : (
-              <Robot key={r.id} id={r.id} email={r.email} name={r.name} />
-            )
-          )}
+          {robotGallery.map((r) => (
+            <Robot key={r.id} id={r.id} name={r.name} email={r.email} />
+          ))}
         </div>
       ) : (
-        <h2>loading 加载中</h2>
+        <h2>Loading 加载中</h2>
       )}
     </div>
   )
